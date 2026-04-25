@@ -1,1 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fire in the Lake — Rules Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --us: #5a6e3a;
+    --us-light: #a8bc7a;
+    --us-bg: #eef3e6;
+    --nva: #8b2020;
+    --nva-light: #d96060;
+    --nva-bg: #f8eaea;
+    --arvn: #8a7200;
+    --arvn-light: #d4b800;
+    --arvn-bg: #faf6e0;
+    --vc: #1a5276;
+    --vc-light: #5dade2;
+    --vc-bg: #e8f4fb;
+    --ink: #1a1410;
+    --parchment: #f5f0e8;
+    --parchment-dark: #e8e0d0;
+    --warm-grey: #8a7f72;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --rule-line: #c8b89a;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 6px,
+      rgba(255,255,255,0.02) 6px,
+      rgba(255,255,255,0.02) 7px
+    );
+  }
+  header .tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--arvn-light);
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  header h1 em {
+    font-style: italic;
+    color: var(--nva-light);
+  }
+  header .subtitle {
+    margin-top: 0.9rem;
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.05em;
+  }
+  .faction-bar {
+    display: flex;
+    height: 5px;
+    width: 100%;
+    margin-top: 2rem;
+  }
+  .faction-bar span { flex: 1; }
+  .faction-bar .us { background: var(--us); }
+  .faction-bar .arvn { background: var(--arvn-light); }
+  .faction-bar .nva { background: var(--nva); }
+  .faction-bar .vc { background: var(--vc-light); }
+
+  /* ---- NAV ---- */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.65);
+    text-decoration: none;
+    padding: 0.75rem 0.9rem;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  nav a:hover { color: var(--arvn-light); }
+
+  /* ---- LAYOUT ---- */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ---- SECTION HEADERS ---- */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--rule-line);
+  }
+  .section-header .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--warm-grey);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ---- CHEAT SHEET ---- */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .cheat-card {
+    background: white;
+    border: 1px solid var(--rule-line);
+    border-radius: 4px;
+    padding: 1.1rem 1.25rem;
+    position: relative;
+  }
+  .cheat-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+    background: var(--accent);
+  }
+  .cheat-card h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm-grey);
+    margin-bottom: 0.5rem;
+  }
+  .cheat-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .cheat-card ul li {
+    padding: 0.2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    border-bottom: 1px dashed var(--parchment-dark);
+    color: var(--ink);
+  }
+  .cheat-card ul li:last-child { border-bottom: none; }
+  .cheat-card ul li strong {
+    color: var(--accent);
+  }
+
+  /* ---- RULES CONTENT ---- */
+  .rule-block {
+    background: white;
+    border: 1px solid var(--rule-line);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .rule-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .rule-block h3 .rule-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    background: var(--parchment-dark);
+    color: var(--warm-grey);
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+    font-weight: 400;
+  }
+  .rule-block p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: #2a2420;
+    margin-bottom: 0.5rem;
+  }
+  .rule-block p:last-child { margin-bottom: 0; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ---- CALLOUT ---- */
+  .callout {
+    border-left: 4px solid var(--gold);
+    background: #fffbec;
+    padding: 0.8rem 1rem;
+    font-size: 0.87rem;
+    border-radius: 0 4px 4px 0;
+    margin: 0.75rem 0;
+    color: #3a3010;
+  }
+  .callout strong { color: var(--gold); }
+  .callout.important {
+    border-left-color: var(--accent);
+    background: #fff5f5;
+    color: #3a1010;
+  }
+  .callout.important strong { color: var(--accent); }
+
+  /* ---- FACTION CARDS ---- */
+  .faction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 540px) { .faction-grid { grid-template-columns: 1fr; } }
+
+  .faction-card {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--rule-line);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .faction-header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .faction-header .faction-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: white;
+    flex-shrink: 0;
+  }
+  .faction-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+  }
+  .faction-header p {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 0.1rem;
+    font-style: italic;
+  }
+  .faction-body {
+    background: white;
+    padding: 1.25rem;
+  }
+  .faction-body h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm-grey);
+    margin: 1rem 0 0.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+  .faction-body h4:first-child { margin-top: 0; }
+  .faction-body ul {
+    list-style: none;
+    padding: 0;
+  }
+  .faction-body ul li {
+    font-size: 0.87rem;
+    padding: 0.22rem 0;
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .faction-body ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--warm-grey);
+  }
+  .faction-body ul li strong { font-weight: 600; }
+  .victory-box {
+    border-radius: 3px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.88rem;
+    margin-top: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* US faction */
+  .fc-us .faction-header { background: var(--us); }
+  .fc-us .faction-icon { background: rgba(255,255,255,0.25); color: white; }
+  .fc-us .victory-box { background: var(--us-bg); color: var(--us); border: 1px solid var(--us-light); }
+
+  /* ARVN faction */
+  .fc-arvn .faction-header { background: var(--arvn); }
+  .fc-arvn .faction-icon { background: rgba(255,255,255,0.25); color: white; }
+  .fc-arvn .victory-box { background: var(--arvn-bg); color: var(--arvn); border: 1px solid var(--arvn-light); }
+
+  /* NVA faction */
+  .fc-nva .faction-header { background: var(--nva); }
+  .fc-nva .faction-icon { background: rgba(255,255,255,0.25); color: white; }
+  .fc-nva .victory-box { background: var(--nva-bg); color: var(--nva); border: 1px solid var(--nva-light); }
+
+  /* VC faction */
+  .fc-vc .faction-header { background: var(--vc); }
+  .fc-vc .faction-icon { background: rgba(255,255,255,0.25); color: white; }
+  .fc-vc .victory-box { background: var(--vc-bg); color: var(--vc); border: 1px solid var(--vc-light); }
+
+  /* ---- TABLES ---- */
+  .rule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 0.75rem 0;
+    background: white;
+  }
+  .rule-table th {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+  }
+  .rule-table td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--parchment-dark);
+    line-height: 1.45;
+    vertical-align: top;
+  }
+  .rule-table tr:last-child td { border-bottom: none; }
+  .rule-table tr:nth-child(even) td { background: #fafaf7; }
+
+  /* ---- SEQUENCE BOX ---- */
+  .sequence-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .seq-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    background: white;
+    border: 1px solid var(--rule-line);
+    border-radius: 3px;
+  }
+  .seq-step .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: var(--ink);
+    color: var(--parchment);
+    border-radius: 2px;
+    padding: 0.1rem 0.4rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .seq-step p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ---- BADGE ---- */
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 0.1rem 0.4rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+  .badge-coin { background: var(--us-bg); color: var(--us); border: 1px solid var(--us-light); }
+  .badge-ins { background: var(--nva-bg); color: var(--nva); border: 1px solid var(--nva-light); }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    text-align: center;
+    padding: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+  footer a { color: rgba(245,240,232,0.6); }
+
+  /* ---- ANCHOR OFFSET ---- */
+  [id] { scroll-margin-top: 50px; }
+
+  /* ---- MISC ---- */
+  .intro-blurb {
+    max-width: 780px;
+    margin: 2rem auto 0;
+    background: white;
+    border: 1px solid var(--rule-line);
+    border-radius: 4px;
+    padding: 1.4rem 1.75rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #2a2420;
+    text-align: center;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 99px;
+    border: 1px solid;
+  }
+  .pill-us { border-color: var(--us); color: var(--us); background: var(--us-bg); }
+  .pill-arvn { border-color: var(--arvn); color: var(--arvn); background: var(--arvn-bg); }
+  .pill-nva { border-color: var(--nva); color: var(--nva); background: var(--nva-bg); }
+  .pill-vc { border-color: var(--vc); color: var(--vc); background: var(--vc-bg); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tagline">COIN Series · Volume IV · Rules Reference</div>
+  <h1>Fire in the <em>Lake</em></h1>
+  <p class="subtitle">A comprehensive player reference — Second Edition (2018) · GMT Games</p>
+  <div class="faction-bar">
+    <span class="us"></span>
+    <span class="arvn"></span>
+    <span class="nva"></span>
+    <span class="vc"></span>
+  </div>
+</header>
+
+<nav>
+  <a href="#cheatsheet">Cheat Sheet</a>
+  <a href="#sequence">Sequence</a>
+  <a href="#operations">Operations</a>
+  <a href="#special">Special Activities</a>
+  <a href="#coup">Coup Rounds</a>
+  <a href="#victory">Victory</a>
+  <a href="#factions">Faction Rules</a>
+  <a href="#nonplayer">Non-Player</a>
+</nav>
+
+<div class="container">
+
+  <div class="intro-blurb">
+    <strong>Fire in the Lake</strong> is a 1–4 player COIN wargame set in Vietnam, 1964–1972. Four factions — US, ARVN, NVA, and VC — each pursue distinct military, political, and economic strategies via a shared card deck. This reference summarises all key rules and provides faction-specific cheat sheets for fast play.
+    <div class="pill-row">
+      <span class="pill pill-us">🟢 US — Olive</span>
+      <span class="pill pill-arvn">🟡 ARVN — Yellow/Orange</span>
+      <span class="pill pill-nva">🔴 NVA — Red</span>
+      <span class="pill pill-vc">🔵 VC — Blue</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CHEAT SHEET -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="cheatsheet">
+    <div class="num">Quick Ref</div>
+    <h2>Cheat Sheet — Key Rules at a Glance</h2>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h3>Eligibility</h3>
+      <ul>
+        <li>Execute Op/Event last card → <strong>Ineligible</strong> next card</li>
+        <li>Did NOT execute → <strong>Eligible</strong></li>
+        <li>All Factions start Eligible; reset after each Coup Round</li>
+        <li>Pass → stay Eligible; Insurgent +1 Res, COIN +3 ARVN Res</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Card Play Options</h3>
+      <ul>
+        <li><strong>1st Eligible:</strong> Op (±SA), or Event</li>
+        <li><strong>2nd Eligible after Op Only:</strong> Limited Op (no SA)</li>
+        <li><strong>2nd Eligible after Op+SA:</strong> LimOp OR Event</li>
+        <li><strong>2nd Eligible after Event:</strong> Op (±SA)</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Limited Operation</h3>
+      <ul>
+        <li>Op in <strong>1 space only</strong>, no Special Activity</li>
+        <li>Patrol/Sweep/March: pieces from multiple spaces but <strong>1 destination</strong></li>
+        <li>Non-Players always get full Op+SA instead of LimOp</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Resources</h3>
+      <ul>
+        <li>Max 75; tracked on edge track</li>
+        <li>US spends <strong>ARVN Resources</strong> (above Econ marker only)</li>
+        <li>NVA/VC may transfer up to <strong>half</strong> Resources to each other during their turn</li>
+        <li>Insurgents earn +1 per Rally (Pass only)</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Support & Opposition</h3>
+      <ul>
+        <li>5 levels: Active Support → Passive Support → <strong>Neutral</strong> → Passive Opposition → Active Opposition</li>
+        <li>Active counts <strong>double Population</strong> for totals</li>
+        <li>Pop 0 spaces and LoCs always Neutral</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Control</h3>
+      <ul>
+        <li><strong>COIN Control:</strong> US+ARVN pieces together exceed NVA+VC combined</li>
+        <li><strong>NVA Control:</strong> NVA pieces alone exceed ALL others (including VC)</li>
+        <li>Adjust markers immediately when pieces change</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Stacking & Placement</h3>
+      <ul>
+        <li>Max <strong>2 Bases</strong> per Province/City (any mix of Factions)</li>
+        <li>Bases may NOT be on LoCs</li>
+        <li>Only NVA/VC may be in North Vietnam</li>
+        <li>New Guerrillas/SF always placed <strong>Underground</strong></li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Underground vs Active</h3>
+      <ul>
+        <li>Guerrillas/SF start Underground (symbol-end down)</li>
+        <li><strong>Assault/Air Strike cannot remove Underground Guerrillas</strong></li>
+        <li>Sweep and Patrol <em>Activate</em> Guerrillas (flip up)</li>
+        <li>Coup Reset flips ALL Guerrillas/SF back Underground</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Tunneled Bases</h3>
+      <ul>
+        <li>When base would be removed: roll a die</li>
+        <li><strong>1–3:</strong> Nothing happens, stop removing in that space</li>
+        <li><strong>4–6:</strong> Remove Tunnel marker only (Base stays)</li>
+        <li>NVA can Infiltrate to flip a VC Tunnel to NVA</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Assault Removal Priority</h3>
+      <ul>
+        <li>1. NVA Troops first</li>
+        <li>2. Active NVA or VC Guerrillas (attacker chooses order)</li>
+        <li>3. Bases — <strong>only once no Guerrillas remain</strong></li>
+        <li>Underground Guerrillas block Base removal</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Monsoon</h3>
+      <ul>
+        <li>Active when a Coup card is showing as next card</li>
+        <li><strong>No Sweep, no March</strong></li>
+        <li>Air Strike and Air Lift limited to <strong>2 spaces</strong></li>
+        <li>No Pivotal Events played during Monsoon</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Events</h3>
+      <ul>
+        <li>Event text overrides rules (except stacking/North Vietnam)</li>
+        <li><strong>Dual-Use:</strong> choose unshaded or shaded text</li>
+        <li><strong>Capabilities:</strong> lasting for rest of game</li>
+        <li><strong>Momentum:</strong> lasting until next Coup Reset</li>
+        <li>Pivotal Events: cancel current card, preempt Eligibility order</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Coup Round Sequence</h3>
+      <ul>
+        <li>1. Victory Phase (check win)</li>
+        <li>2. Resources Phase (Sabotage → Econ → Earnings)</li>
+        <li>3. Support Phase (Pacification / Agitation)</li>
+        <li>4. Redeploy Phase</li>
+        <li>5. Commitment Phase (US forces in/out)</li>
+        <li>6. Reset Phase (all Guerrillas Underground, Eligible)</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Trail Track (0–4)</h3>
+      <ul>
+        <li>Raised by: NVA Rally (+2 Res), Events</li>
+        <li>Lowered by: Air Strike (2 hits), COIN controlling Laos/Cambodia (Coup), Events, Reset (if at 0→1 or 4→3)</li>
+        <li>Affects NVA Rally, March speed, Infiltrate, and NVA Earnings</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h3>Free Operations</h3>
+      <ul>
+        <li>No Resource cost; do NOT affect Eligibility</li>
+        <li><strong>EXCEPTION:</strong> Pacification, Agitation, Trail Improvement still cost Resources</li>
+        <li>2nd Eligible gets Event option if 1st used a Special Activity</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEQUENCE OF PLAY -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="sequence">
+    <div class="num">§ 2</div>
+    <h2>Sequence of Play</h2>
+  </div>
+
+  <div class="rule-block">
+    <h3><span class="rule-num">2.2</span> Card Play Flow</h3>
+    <div class="sequence-steps">
+      <div class="seq-step"><span class="step-num">1</span><p>Reveal top card from draw deck → place on played pile. Reveal next card for preview (players always see 1 card ahead).</p></div>
+      <div class="seq-step"><span class="step-num">2</span><p>If <strong>Event Card</strong>: determine Faction order from symbols left-to-right on card. Skip Ineligible Factions.</p></div>
+      <div class="seq-step"><span class="step-num">3</span><p>1st Eligible: Pass, play the Event, or execute an Operation (with or without a Special Activity).</p></div>
+      <div class="seq-step"><span class="step-num">4</span><p>2nd Eligible: options depend on what 1st Eligible did (see Cheat Sheet above).</p></div>
+      <div class="seq-step"><span class="step-num">5</span><p>Adjust Eligibility cylinders. Executed Op or Event → Ineligible. Did not execute → Eligible.</p></div>
+      <div class="seq-step"><span class="step-num">6</span><p>If <strong>Coup Card</strong>: resolve immediate card effect, then conduct a full Coup Round (§ 6).</p></div>
+    </div>
+    <div class="callout" style="margin-top:0.75rem">
+      <strong>Record keeping:</strong> Place a cylinder of the executing Faction's color in the matching Sequence of Play box to track actions.
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="rule-block">
+      <h3><span class="rule-num">2.3.8</span> Pivotal Events</h3>
+      <p>Each Faction (Medium/Full scenarios) holds 1 Pivotal Event. Play it to <strong>cancel the current card</strong> if:</p>
+      <ul style="list-style:disc;padding-left:1.2rem;font-size:0.88rem;line-height:1.6">
+        <li>That Faction is Eligible</li>
+        <li>Red pre-condition on card is met</li>
+        <li>1st Eligible has not yet acted</li>
+        <li>No Coup is showing as next card</li>
+      </ul>
+      <p style="margin-top:0.5rem;font-size:0.88rem"><strong>Trumping order:</strong> VC &gt; ARVN &gt; NVA &gt; US (US cannot trump any).</p>
+    </div>
+    <div class="rule-block">
+      <h3><span class="rule-num">2.4.1</span> RVN Leader</h3>
+      <p>Most recently played Coup card is the current <strong>RVN Leader</strong>. Its text is in effect as a lingering Event.</p>
+      <p style="margin-top:0.5rem;font-size:0.88rem">"Failed Attempt" cards only cancel "Duong Van Minh" and do not count as a card in the box for Pivotal Event preconditions.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- OPERATIONS -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="operations">
+    <div class="num">§ 3</div>
+    <h2>Operations</h2>
+  </div>
+
+  <div class="callout important">
+    <strong>Key Rule:</strong> An Operation must be executed in at least 1 space to count (or for NVA Rally, Improve the Trail). Once targeted, enemy pieces are affected to the <em>maximum extent possible</em>.
+  </div>
+
+  <table class="rule-table">
+    <thead>
+      <tr>
+        <th>Operation</th>
+        <th>Faction</th>
+        <th>Cost</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Train</strong></td>
+        <td><span class="badge badge-coin">COIN</span></td>
+        <td>3 ARVN Res (if placing pieces)</td>
+        <td>Place ARVN forces; optionally Pacify (remove Terror, shift toward Support) in 1 space at 3 Res per shift/marker; or ARVN replace 3 cubes with Base; or transfer Patronage→Resources in Saigon (US only).</td>
+      </tr>
+      <tr>
+        <td><strong>Patrol</strong></td>
+        <td><span class="badge badge-coin">COIN</span></td>
+        <td>ARVN 3 Res total; US free</td>
+        <td>Move cubes along LoCs/Cities until stopped by enemy. Activate 1 enemy Guerrilla per cube in each LoC. May Assault 1 LoC at no extra cost.</td>
+      </tr>
+      <tr>
+        <td><strong>Sweep</strong></td>
+        <td><span class="badge badge-coin">COIN</span></td>
+        <td>ARVN 3 Res/space; US free. Not in Monsoon.</td>
+        <td>Move Troops into Province/City destinations. Activate 1 enemy Guerrilla per cube/SF (½ in Jungle, round down).</td>
+      </tr>
+      <tr>
+        <td><strong>Assault</strong></td>
+        <td><span class="badge badge-coin">COIN</span></td>
+        <td>ARVN 3 Res/space; US +3 ARVN Res to add ARVN assault</td>
+        <td>Remove Active enemies. ARVN: 1 enemy per 2 cubes (3 in Highland). US: 1 per Troop (2 per Troop with US Base; ½ in Highland without Base). Remove Troops → Guerrillas → Bases last.</td>
+      </tr>
+      <tr>
+        <td><strong>Rally</strong></td>
+        <td><span class="badge badge-ins">Insurgent</span></td>
+        <td>1 Res/space (not Support spaces)</td>
+        <td>Place 1 Guerrilla or replace 2 Guerrillas with Base. With own Base: NVA place up to Trail+Bases Guerrillas; VC place up to Pop+VC Bases or flip all Underground. NVA may also spend +2 Res to Improve Trail.</td>
+      </tr>
+      <tr>
+        <td><strong>March</strong></td>
+        <td><span class="badge badge-ins">Insurgent</span></td>
+        <td>1 Res/Province or City entered (LoCs free). Not in Monsoon.</td>
+        <td>Move Guerrillas/Troops into adjacent spaces. Activate moving group if destination is LoC or Support AND total pieces there exceed 3. NVA Trail extends movement through Laos/Cambodia.</td>
+      </tr>
+      <tr>
+        <td><strong>Attack</strong></td>
+        <td><span class="badge badge-ins">Insurgent</span></td>
+        <td>1 Res/space</td>
+        <td>Activate all Guerrillas, roll ≤ number of Guerrillas → remove up to 2 enemies. NVA may instead remove 1 enemy per 2 NVA Troops. US pieces removed → Casualties; remove 1 attacker per US Troop/Base (Attrition).</td>
+      </tr>
+      <tr>
+        <td><strong>Terror</strong></td>
+        <td><span class="badge badge-ins">Insurgent</span></td>
+        <td>1 Res/Province or City (LoCs free)</td>
+        <td>Activate 1 Underground Guerrilla per space. In Province/City: place Terror marker; VC shift 1 level toward Active Opposition; NVA shift Support 1 toward Neutral. On LoC: place Sabotage marker.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- SPECIAL ACTIVITIES -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="special">
+    <div class="num">§ 4</div>
+    <h2>Special Activities</h2>
+  </div>
+  <div class="callout">
+    <strong>Timing:</strong> A Faction may execute its Special Activity at any point immediately before, during, or after its Operation. A Special Activity may only accompany a full Operation (not a Limited Op). No extra Resource cost.
+  </div>
+
+  <table class="rule-table">
+    <thead>
+      <tr>
+        <th>Activity</th>
+        <th>Faction</th>
+        <th>Restriction</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Advise</strong></td>
+        <td><span class="badge badge-coin">US</span></td>
+        <td>Accompanies Train or Patrol. 1–2 spaces NOT selected for Training.</td>
+        <td>Per space: Sweep ARVN as if ARVN Sweep, OR Assault as if ARVN Assault, OR Activate 1 Underground Irregular/Ranger to remove 2 enemies (Bases last; Tunneled Bases immune). Optionally +6 Aid total.</td>
+      </tr>
+      <tr>
+        <td><strong>Air Lift</strong></td>
+        <td><span class="badge badge-coin">US</span></td>
+        <td>2 spaces in Monsoon. Not North Vietnam.</td>
+        <td>Move any US Troops + up to 4 ARVN Troops/Rangers/Irregulars among any 4 spaces (2 in Monsoon).</td>
+      </tr>
+      <tr>
+        <td><strong>Air Strike</strong></td>
+        <td><span class="badge badge-coin">US</span></td>
+        <td>Up to 6 spaces with any US/ARVN piece (2 in Monsoon). Not Underground Guerrillas nor Tunneled Bases.</td>
+        <td>Roll die = total hits. 1 hit removes 1 Active enemy; 2 hits Degrade Trail 1 box (max 1 box per Strike). Each space where piece removed shifts 1 toward Active Opposition (if Pop ≥ 1). Remove NVA Troops before Guerrillas; Bases last.</td>
+      </tr>
+      <tr>
+        <td><strong>Govern</strong></td>
+        <td><span class="badge badge-coin">ARVN</span></td>
+        <td>Accompanies Train or Patrol. 1–2 COIN-Controlled Provinces/Cities (not Saigon, not same space as Training).</td>
+        <td>Per space: Add 3×Pop to Aid (max 75), OR transfer Pop×1 from Aid→Patronage and shift 1 toward Neutral (needs more ARVN cubes than US Troops).</td>
+      </tr>
+      <tr>
+        <td><strong>Transport</strong></td>
+        <td><span class="badge badge-coin">ARVN</span></td>
+        <td>Not North Vietnam.</td>
+        <td>Select 1 space; move up to 6 ARVN Troops/Rangers along adjacent LoCs, through Cities, into any adjacent destination. Stop at NVA/VC pieces. Then flip ALL Rangers anywhere Underground.</td>
+      </tr>
+      <tr>
+        <td><strong>Raid</strong></td>
+        <td><span class="badge badge-coin">ARVN</span></td>
+        <td>Accompanies Patrol, Sweep, or Assault. 1–2 spaces.</td>
+        <td>Move in adjacent Rangers. Activate an Underground Ranger to remove 2 enemy pieces (Bases last; Tunneled Bases immune).</td>
+      </tr>
+      <tr>
+        <td><strong>Infiltrate</strong></td>
+        <td><span class="badge badge-ins">NVA</span></td>
+        <td>Accompanies Rally or March. 1–2 spaces with NVA Base OR more NVA than VC.</td>
+        <td>If NVA Base: place Troops up to Trail+NVA Bases, then optionally swap NVA Guerrillas for Troops. If NVA outnumber VC: shift Opposition toward Neutral, then replace 1 VC piece with NVA counterpart (can flip VC Tunnel to NVA).</td>
+      </tr>
+      <tr>
+        <td><strong>Bombard</strong></td>
+        <td><span class="badge badge-ins">NVA</span></td>
+        <td>1–2 spaces with ≥ 3 COIN Troops or a COIN Base + ≥1 COIN Troop; must have ≥3 NVA Troops in or adjacent to space.</td>
+        <td>Remove 1 US or ARVN Troop cube from each space (US cubes go to Casualties).</td>
+      </tr>
+      <tr>
+        <td><strong>Ambush (NVA)</strong></td>
+        <td><span class="badge badge-ins">NVA</span></td>
+        <td>1–2 spaces (March destinations or Attack spaces). At least 1 Underground NVA Guerrilla per space.</td>
+        <td>Attack without rolling: automatically remove 1 enemy (Bases last); activate only 1 Guerrilla; no NVA attrition even if US Troop removed. If space is LoC, may remove enemy from any adjacent space instead.</td>
+      </tr>
+      <tr>
+        <td><strong>Tax</strong></td>
+        <td><span class="badge badge-ins">VC</span></td>
+        <td>Up to 4 spaces with Underground VC Guerrilla and no COIN Control.</td>
+        <td>Activate 1 Underground VC Guerrilla per space. Gain Econ (LoC) or 2×Pop (Province/City) in Resources. In Province/City: shift 1 level toward Active Support.</td>
+      </tr>
+      <tr>
+        <td><strong>Subvert</strong></td>
+        <td><span class="badge badge-ins">VC</span></td>
+        <td>Accompanies Rally, March, or Terror. 1–2 spaces with ≥1 Underground VC Guerrilla and ARVN cubes.</td>
+        <td>Remove 2 ARVN cubes or replace 1 with a VC Guerrilla. Reduce Patronage –1 per 2 ARVN pieces removed/replaced (round down).</td>
+      </tr>
+      <tr>
+        <td><strong>Ambush (VC)</strong></td>
+        <td><span class="badge badge-ins">VC</span></td>
+        <td>Same as NVA Ambush but using VC Guerrillas.</td>
+        <td>Same as NVA Ambush rules (see above).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- COUP ROUNDS -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="coup">
+    <div class="num">§ 6</div>
+    <h2>Coup Rounds</h2>
+  </div>
+
+  <div class="sequence-steps">
+    <div class="seq-step">
+      <span class="step-num">6.1</span>
+      <p><strong>Victory Phase:</strong> Check if any Faction meets its victory condition. If yes, game ends (see Victory). Otherwise continue.</p>
+    </div>
+    <div class="seq-step">
+      <span class="step-num">6.2</span>
+      <p><strong>Resources Phase:</strong> (a) Sabotage unsabotaged LoCs where Insurgent Guerrillas outnumber COIN or adjacent to City without COIN Control. (b) Degrade Trail 1 if any Laos/Cambodia space is COIN-Controlled. (c) ARVN earns Aid + unSabotaged Econ total. (d) Insurgents earn: VC = VC Bases on map; NVA = Laos/Cambodia Bases + (2×Trail). (e) Subtract 3×Casualties from Aid.</p>
+    </div>
+    <div class="seq-step">
+      <span class="step-num">6.3</span>
+      <p><strong>Support Phase:</strong> US then ARVN Pacify (combined max 4 spaces): each space must have COIN Control + Police + Faction's Troops; 3 ARVN Res removes Terror or shifts 1 level toward Active Support (max 2 shifts per space per Phase). VC Agitate in up to 4 spaces with VC pieces and no COIN Control; 1 VC Res removes Terror or shifts 1 level toward Active Opposition.</p>
+    </div>
+    <div class="seq-step">
+      <span class="step-num">6.4</span>
+      <p><strong>Redeploy Phase:</strong> Remove all US/ARVN from Laos/Cambodia (US Troops out-of-play). ARVN must move Troops from LoCs and Provinces without COIN Bases to Cities/Bases/Saigon; may move Police to LoCs or COIN-Controlled spaces. NVA may move NVA Troops to any NVA Bases. Adjust Control markers.</p>
+    </div>
+    <div class="seq-step">
+      <span class="step-num">6.5</span>
+      <p><strong>Commitment Phase (2nd Ed):</strong> Take 1-in-3 US Troop Casualties and all Base Casualties out of play. Return Irregular Casualties to Available. US places remaining Troop Casualties in COIN-Controlled spaces/LoCs/Saigon. US then moves up to (10 minus Casualties placed) US Troops + up to 2 Bases among Available, COIN spaces, LoCs, Saigon. For every 2 US pieces moved map→Available, VC may shift 1 space 1 level toward Opposition.</p>
+    </div>
+    <div class="seq-step">
+      <span class="step-num">6.6</span>
+      <p><strong>Reset Phase:</strong> Trail: if 0 → raise to 1; if 4 → lower to 3. Remove ALL Terror and Sabotage markers. Flip ALL Guerrillas and SF Underground. Discard Momentum Events. Mark all Factions Eligible. Play next card.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- VICTORY -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="victory">
+    <div class="num">§ 7</div>
+    <h2>Victory Conditions</h2>
+  </div>
+
+  <div class="two-col">
+    <div class="rule-block">
+      <h3>During Coup Rounds (§ 7.2)</h3>
+      <p>At the start of each Coup Round, check victory markers against edge track thresholds:</p>
+      <table class="rule-table" style="margin-top:0.5rem">
+        <thead><tr><th>Faction</th><th>Condition to Win</th></tr></thead>
+        <tbody>
+          <tr><td>🟢 US</td><td>Total Support + Available US Troops & Bases <strong>&gt; 50</strong></td></tr>
+          <tr><td>🔴 NVA</td><td>NVA-Controlled Population + NVA Bases on map <strong>&gt; 18</strong></td></tr>
+          <tr><td>🟡 ARVN</td><td>COIN-Controlled Population + Patronage <strong>&gt; 50</strong></td></tr>
+          <tr><td>🔵 VC</td><td>Total Opposition + VC Bases on map <strong>&gt; 35</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rule-block">
+      <h3>Final Coup Margin (§ 7.3)</h3>
+      <p>If no one wins by final Coup Round, highest <em>margin</em> (amount above or below threshold) wins.</p>
+      <table class="rule-table" style="margin-top:0.5rem">
+        <thead><tr><th>Faction</th><th>Margin Formula</th></tr></thead>
+        <tbody>
+          <tr><td>🟢 US</td><td>Total Support + Available US − 50</td></tr>
+          <tr><td>🔴 NVA</td><td>NVA Pop Controlled + NVA Bases − 18</td></tr>
+          <tr><td>🟡 ARVN</td><td>COIN Pop Controlled + Patronage − 50</td></tr>
+          <tr><td>🔵 VC</td><td>Total Opposition + VC Bases − 35</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.5rem;font-size:0.85rem"><strong>Tie-break order:</strong> Non-Players → VC → ARVN → NVA</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FACTION-SPECIFIC RULES -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="factions">
+    <div class="num">Factions</div>
+    <h2>Faction-Specific Rules</h2>
+  </div>
+
+  <div class="faction-grid">
+
+    <!-- US -->
+    <div class="faction-card fc-us">
+      <div class="faction-header">
+        <div class="faction-icon">US</div>
+        <div>
+          <h2>United States</h2>
+          <p>Counterinsurgent · Olive Cubes</p>
+        </div>
+      </div>
+      <div class="faction-body">
+        <h4>Operations</h4>
+        <ul>
+          <li><strong>Train:</strong> Place 1–2 Irregulars, or at US Bases 1–2 Rangers or up to 6 ARVN cubes per space. US gets Troops in/out via Commitment Phase, not Operations.</li>
+          <li><strong>Patrol:</strong> Free (0 Resources). Move cubes through LoCs/Cities; Activate enemies on LoCs.</li>
+          <li><strong>Sweep:</strong> Free. Activate 1 enemy Guerrilla per cube/SF (½ in Jungle). Not in Monsoon.</li>
+          <li><strong>Assault:</strong> Costs 3 ARVN Res only if adding ARVN follow-up. Count US Troops only. 2 removes per Troop with US Base; 1 remove per Troop normally; ½ per Troop in Highland with no Base.</li>
+        </ul>
+        <h4>Special Activities</h4>
+        <ul>
+          <li><strong>Advise:</strong> Sweep/Assault as if ARVN in 1–2 spaces not used for Training. Activate Irregular/Ranger to remove 2 enemies. +6 Aid option.</li>
+          <li><strong>Air Lift:</strong> Move any US Troops + up to 4 ARVN pieces among 4 spaces (2 in Monsoon).</li>
+          <li><strong>Air Strike:</strong> Roll die = hits. 1 hit = remove 1 Active enemy OR 2 hits = Degrade Trail 1 box (max 1 box). Removes Active pieces; shifts each hit space toward Active Opposition.</li>
+        </ul>
+        <h4>Special Rules</h4>
+        <ul>
+          <li>US does NOT track its own Resources — spends ARVN Resources (only above Total Econ marker)</li>
+          <li>US Troops become Casualties when removed by Attack (not to Available)</li>
+          <li>US forces enter/leave via Commitment Phase; cannot place/move own Troops via Operations</li>
+          <li>US-led Irregulars are Special Forces (SF) — track separately in US-led Irregulars box</li>
+          <li>In Saigon during Train: may transfer up to 3 Patronage → ARVN Resources</li>
+        </ul>
+        <div class="victory-box">
+          🎯 <strong>Victory:</strong> Total Support + Available US (Troops & Bases) &gt; 50
+        </div>
+      </div>
+    </div>
+
+    <!-- ARVN -->
+    <div class="faction-card fc-arvn">
+      <div class="faction-header">
+        <div class="faction-icon">RVN</div>
+        <div>
+          <h2>ARVN</h2>
+          <p>Counterinsurgent · Yellow Troops, Orange Police</p>
+        </div>
+      </div>
+      <div class="faction-body">
+        <h4>Operations</h4>
+        <ul>
+          <li><strong>Train:</strong> 3 Res if placing pieces. Place 1–2 Rangers or up to 6 ARVN cubes at Cities or US/ARVN Bases. In 1 space, Pacify (needs ARVN Troops + Police + COIN Control) or replace 3 cubes with Base.</li>
+          <li><strong>Patrol:</strong> 3 Res total. Move cubes through LoCs/Cities. Police count in Cities and LoCs for Assault; only Troops count in Provinces.</li>
+          <li><strong>Sweep:</strong> 3 Res/space. Count cubes + Rangers (Special Forces). In Jungle: 1 Activate per 2 cubes/SF.</li>
+          <li><strong>Assault:</strong> 3 Res/space. 1 enemy per 2 cubes (3 in Highland). Police count in Cities/LoCs; Troops only in Provinces.</li>
+        </ul>
+        <h4>Special Activities</h4>
+        <ul>
+          <li><strong>Govern:</strong> With Train or Patrol. In COIN-Controlled Provinces/Cities (not Saigon, not Training space): add 3×Pop to Aid OR transfer Pop from Aid→Patronage + shift 1 toward Neutral.</li>
+          <li><strong>Transport:</strong> Move up to 6 ARVN Troops/Rangers along LoCs and into destinations. Flips ALL Rangers Underground after.</li>
+          <li><strong>Raid:</strong> With Patrol/Sweep/Assault. Move in adjacent Rangers. Activate Underground Ranger to remove 2 enemies (Bases last; Tunneled Bases immune).</li>
+        </ul>
+        <h4>Special Rules</h4>
+        <ul>
+          <li>ARVN Resources are shared — US can spend them above Total Econ, ARVN can spend at or below Econ</li>
+          <li>Aid is added to ARVN Resources each Coup Round; Patronage contributes to victory</li>
+          <li>ARVN Troops must Redeploy from LoCs/Provinces without COIN Bases during Coup Round</li>
+          <li>Rangers begin each Coup Reset as Underground (Transport also resets all Rangers Underground)</li>
+          <li>Patronage: tracks Saigon regime's "corruption" pool (0–75). Lost via Subvert or Govern.</li>
+        </ul>
+        <div class="victory-box">
+          🎯 <strong>Victory:</strong> COIN-Controlled Population + Patronage &gt; 50
+        </div>
+      </div>
+    </div>
+
+    <!-- NVA -->
+    <div class="faction-card fc-nva">
+      <div class="faction-header">
+        <div class="faction-icon">NVA</div>
+        <div>
+          <h2>NVA</h2>
+          <p>Insurgent · Red Cubes</p>
+        </div>
+      </div>
+      <div class="faction-body">
+        <h4>Operations</h4>
+        <ul>
+          <li><strong>Rally:</strong> 1 Res/space (not Support spaces). With NVA Base: place Guerrillas up to Trail + NVA Bases. Can spend +2 Res to Improve Trail (even on LimOp or 0 spaces).</li>
+          <li><strong>March:</strong> 1 Res/Province or City entered. Use Trail to extend through Laos/Cambodia. If Trail = 4, Laos/Cambodia spaces cost 0. Not in Monsoon.</li>
+          <li><strong>Attack:</strong> 1 Res/space. Roll ≤ Guerrilla count → remove 2 enemies. OR remove 1 enemy per 2 NVA Troops (no roll needed). US removed → Casualties + NVA Attrition.</li>
+          <li><strong>Terror:</strong> Activate 1 Underground Guerrilla or NVA Troops can activate instead. In Province/City: place Terror, shift Support toward Neutral. On LoC: place Sabotage.</li>
+        </ul>
+        <h4>Special Activities</h4>
+        <ul>
+          <li><strong>Infiltrate:</strong> With Rally or March. At NVA Base: place Troops up to Trail+NVA Bases; swap Guerrillas for Troops. If NVA&gt;VC: shift Opposition toward Neutral + replace 1 VC piece with NVA.</li>
+          <li><strong>Bombard:</strong> Needs ≥3 COIN Troops or COIN Base+Troop in space, plus ≥3 NVA Troops in/adjacent. Removes 1 US or ARVN Troop cube (US → Casualties).</li>
+          <li><strong>Ambush:</strong> With March or Attack. Underground NVA Guerrilla required. Auto-remove 1 enemy (no roll); activate only 1 Guerrilla; no attrition for US kills. From LoC: remove from any adjacent space.</li>
+        </ul>
+        <h4>Special Rules</h4>
+        <ul>
+          <li>NVA may occupy North Vietnam, Laos, Cambodia — US/ARVN may not stay in foreign spaces after Coup Redeploy</li>
+          <li>Trail (0–4) is the NVA's most important resource: affects Rally, March, Infiltrate, Earnings</li>
+          <li>NVA Earnings: Laos/Cambodia Bases + (2 × Trail value) per Coup Round</li>
+          <li>NVA Control is exclusive — NVA alone must outnumber ALL other factions (including VC)</li>
+          <li>NVA can Infiltrate to convert VC pieces (even Tunneled Bases) to NVA</li>
+        </ul>
+        <div class="victory-box">
+          🎯 <strong>Victory:</strong> NVA-Controlled Population + NVA Bases on map &gt; 18
+        </div>
+      </div>
+    </div>
+
+    <!-- VC -->
+    <div class="faction-card fc-vc">
+      <div class="faction-header">
+        <div class="faction-icon">VC</div>
+        <div>
+          <h2>Viet Cong</h2>
+          <p>Insurgent · Blue Guerrillas</p>
+        </div>
+      </div>
+      <div class="faction-body">
+        <h4>Operations</h4>
+        <ul>
+          <li><strong>Rally:</strong> 1 Res/space (not Support spaces). With VC Base: place Guerrillas up to Pop + VC Bases, OR flip all Guerrillas Underground. Agitate with "Cadres" Capability (costs Resources even if free Rally).</li>
+          <li><strong>March:</strong> 1 Res/Province or City. LoCs free. Moving group Activates if destination is LoC or Support AND combined pieces exceed 3. Not in Monsoon.</li>
+          <li><strong>Attack:</strong> 1 Res/space. Roll ≤ Guerrilla count → remove 2 enemies. US pieces → Casualties + Attrition.</li>
+          <li><strong>Terror:</strong> Underground VC Guerrilla required. Place Terror marker, shift 1 level toward Active Opposition (stronger than NVA Terror, which only neutralises Support).</li>
+        </ul>
+        <h4>Special Activities</h4>
+        <ul>
+          <li><strong>Tax:</strong> Up to 4 spaces with Underground VC Guerrilla, no COIN Control. Gain Econ value (LoC) or 2×Pop Resources. Province/City: shift 1 toward Active Support (activating VC reveals them).</li>
+          <li><strong>Subvert:</strong> With Rally, March, or Terror. Remove 2 ARVN cubes or replace 1 with VC Guerrilla; drop Patronage –1 per 2 ARVN removed (round down).</li>
+          <li><strong>Ambush:</strong> Same as NVA Ambush. Underground VC Guerrilla required. Auto-remove 1 enemy, no attrition. From LoC: remove from adjacent space.</li>
+        </ul>
+        <h4>Special Rules</h4>
+        <ul>
+          <li>VC Guerrillas are the heart of the VC — manage Underground status carefully</li>
+          <li>VC Earnings: 1 Resource per VC Base on the map each Coup Round</li>
+          <li>VC Agitate during Coup (Support Phase): 1 Res removes Terror or shifts 1 level toward Active Opposition</li>
+          <li>VC Terror shifts toward Active Opposition (NVA only removes Support — both useful for different victory goals)</li>
+          <li>VC can Subvert to erode ARVN power and Patronage; key for disrupting ARVN victory</li>
+          <li>VC LoC Taxation: ignores COIN Control on LoCs — powerful resource tool even in enemy territory</li>
+        </ul>
+        <div class="victory-box">
+          🎯 <strong>Victory:</strong> Total Opposition + VC Bases on map &gt; 35
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end faction-grid -->
+
+  <!-- ============================================================ -->
+  <!-- NON-PLAYER -->
+  <!-- ============================================================ -->
+  <div class="section-header" id="nonplayer">
+    <div class="num">§ 8</div>
+    <h2>Non-Player Factions (Solo / 2–3 Players)</h2>
+  </div>
+
+  <div class="callout">
+    <strong>Non-Players always get full Op + Special Activity</strong> instead of Limited Operations. They execute Events only when they would have an actual effect. They follow priority flowcharts, not player preference.
+  </div>
+
+  <div class="rule-block">
+    <h3>General Non-Player Rules</h3>
+    <p><strong>Piece Priority (placing):</strong> Bases first, then Guerrillas/SF, then alternating Troops and Police (fewest in space first; Troops if tied). Target enemy Underground before Active Guerrillas, US before ARVN, VC before NVA.</p>
+    <p style="margin-top:0.4rem"><strong>Piece Priority (removing friendly):</strong> Reverse of above — Active before Underground Guerrillas; most in space first.</p>
+    <p style="margin-top:0.4rem"><strong>Space selection:</strong> Follow the priority flowchart in order to maximum extent, then randomly via the Random Spaces Map (roll two dice: tens-die then ones-die → space number, follow arrows until candidate reached).</p>
+    <p style="margin-top:0.4rem"><strong>LoC Priority (if LoCs and other spaces are equal):</strong> Choose LoCs last. Among LoCs: highest Econ first, then adjacent to random City, then equal chance die roll.</p>
+    <p style="margin-top:0.4rem"><strong>Dual-Use Events:</strong> NVA/VC always use shaded text; US/ARVN always use unshaded text (unless special Event instructions say otherwise).</p>
+    <p style="margin-top:0.4rem"><strong>Pivotal Events:</strong> Non-players play their Pivotal Event the instant it is playable AND any player Faction is 1st Eligible.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="rule-block">
+      <h3>Non-Player VC Priority (§ 8.5)</h3>
+      <ul style="list-style:decimal;padding-left:1.3rem;font-size:0.88rem;line-height:1.7">
+        <li><strong>Terror:</strong> If enough Resources + Underground Guerrillas to Terror any Support space, or to shift Pop ≥ 2d6 toward Active Opposition → Terror. Then Tax or Subvert.</li>
+        <li><strong>Event/Pass:</strong> Check Capability cards next/current. Roll vs Coup cards in RVN Leader box to decide Pass or Event.</li>
+        <li><strong>Rally:</strong> If would place ≥2 VC Bases, or 3d6 &lt; Available Guerrillas → Rally. Then Tax or Subvert.</li>
+        <li><strong>March:</strong> Get Guerrillas onto LoCs, then into Pop spaces at Neutral/Support, finally remove NVA Control. Then Ambush, Tax, or Subvert.</li>
+        <li><strong>Attack:</strong> If ≥1 Resource; Ambush first, then Attack with ≥3 Active Guerrillas. Then Tax if no Ambush.</li>
+        <li><strong>Pass</strong> if nothing else possible.</li>
+      </ul>
+    </div>
+    <div class="rule-block">
+      <h3>Non-Player NVA Priority (§ 8.6)</h3>
+      <ul style="list-style:decimal;padding-left:1.3rem;font-size:0.88rem;line-height:1.7">
+        <li><strong>Attack:</strong> If Ambush/Troop Attacks can remove a COIN Base or ≥1d6 enemy pieces → Attack. Ambush first, then Troop Attack, then Guerrilla Attack.</li>
+        <li><strong>Event/Pass:</strong> Same Capability roll logic as VC. Pass if 0 Resources.</li>
+        <li><strong>Terror:</strong> If can Terrorize Support spaces with total Pop ≥ 1d6 → do so. Then Bombard.</li>
+        <li><strong>Rally:</strong> If Trail ≤1, NVA Base has &lt;2 units, 2d6 &gt; Available Guerrillas, or would place Base → Rally. Then Improve Trail. Then Infiltrate.</li>
+        <li><strong>March:</strong> Set up Laos/Cambodia Base, get Guerrillas on LoCs, expand NVA Control, mass Troops adjacent to COIN Control. Then Ambush (only if removes a Base), then Infiltrate or Bombard.</li>
+        <li><strong>Pass</strong> if nothing else possible.</li>
+      </ul>
+    </div>
+    <div class="rule-block">
+      <h3>Non-Player ARVN Priority (§ 8.7)</h3>
+      <ul style="list-style:decimal;padding-left:1.3rem;font-size:0.88rem;line-height:1.7">
+        <li><strong>Event/Pass:</strong> Check Capability cards; roll vs Coup cards in RVN Leader box. Pass if would bring Resources to 0.</li>
+        <li><strong>Assault:</strong> If can remove a Base, remove NVA Control, or remove ≥3 enemies → Assault. Then Govern or Raid.</li>
+        <li><strong>Train:</strong> If would place ≥2 Bases or remove COIN Control → Train. Then Govern.</li>
+        <li><strong>Patrol:</strong> If can Activate ≥1d6 Guerrillas → Patrol. Then Govern or Raid.</li>
+        <li><strong>Sweep:</strong> If can Activate ≥1d6 Guerrillas → Sweep. Then Raid.</li>
+        <li><strong>Pass.</strong></li>
+      </ul>
+    </div>
+    <div class="rule-block">
+      <h3>Non-Player US Priority (§ 8.8)</h3>
+      <ul style="list-style:decimal;padding-left:1.3rem;font-size:0.88rem;line-height:1.7">
+        <li><strong>Event/Pass:</strong> Same Capability card check. Pass if would reduce Available below 15 Troops + Bases.</li>
+        <li><strong>Air Strike:</strong> If can remove a Base, Degrade Trail, or remove ≥1d6 Active enemies → Air Strike. Add Aid if ≥1 Base removed.</li>
+        <li><strong>Assault:</strong> If can remove a Base, remove NVA Control, or remove ≥6 enemies → Assault. Then Advise.</li>
+        <li><strong>Train:</strong> If would Pacify ≥1 space, place ≥2 Bases, or remove COIN Control → Train. Then Advise.</li>
+        <li><strong>Sweep/Patrol:</strong> If can Activate ≥1d6 Guerrillas → Sweep or Patrol. Then Advise or Air Lift.</li>
+        <li><strong>Pass.</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rule-block">
+    <h3>Non-Player Support/Opposition Selection (§ 8.4.5)</h3>
+    <table class="rule-table" style="margin-top:0.3rem">
+      <thead><tr><th>Faction</th><th>Primary</th><th>Secondary</th></tr></thead>
+      <tbody>
+        <tr><td>🔵 VC</td><td>Highest gain in Total Opposition</td><td>Highest loss in Total Support</td></tr>
+        <tr><td>🔴 NVA</td><td>Highest loss in Total Support</td><td>Least gain in Total Opposition</td></tr>
+        <tr><td>🟡 ARVN</td><td>Highest loss in Total Opposition</td><td>Least gain in Total Support</td></tr>
+        <tr><td>🟢 US</td><td>Highest gain in Total Support</td><td>Highest loss in Total Opposition</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end container -->
+
+<footer>
+  <p>Rules Reference compiled from <em>Fire in the Lake</em> Second Edition Rules of Play © 2018 GMT Games, LLC · Mark Herman &amp; Volko Ruhnke · COIN Series Vol. IV</p>
+  <p style="margin-top:0.4rem">This document is a player aid summary. Always consult the official rulebook for complete rules.</p>
+</footer>
+
+</body>
+</html>
